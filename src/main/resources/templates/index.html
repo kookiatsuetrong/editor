@@ -7,12 +7,12 @@
 	<button class="btn btn-primary" onclick="runJava()">Run Java</button>
 	<button class="btn btn-primary" onclick="runJavaScript()">Run JavaScript</button>
 </div>
-<textarea class="form-control" rows="20"
+<textarea class="form-control" rows="8"
 			  id="editor" spellcheck="false"
->class Test {
-	public static void main(String[] z) {
-		System.out.println("Welcome");
-	}
+>#include <stdio.h>
+int main(void) {
+	printf("Welcome to C");
+	return 0;
 }
 </textarea>
 <pre id="result"></pre>
@@ -24,6 +24,7 @@
 		font-size: 1.5rem;
 		margin: 0.5rem 0;
 		tab-size: 4;
+		height: calc(100vh - 10rem);
 	}
 	#result {
 		margin-top: 1rem;

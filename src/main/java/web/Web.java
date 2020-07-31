@@ -11,12 +11,12 @@ class Web {
 	String showHome() {
 		return "index";
 	}
-	String slot = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	String slot = "abcdefghijklmnopqrstuvwxyz";
 	char[] all  = slot.toCharArray();
 	String random() {
 		String s = "";
 		for (int i = 0; i < 10; i++) {
-			int r = (int)(Math.random() * 36);
+			int r = (int)(Math.random() * 26);
 			s += all[r];
 		}
 		return s;
@@ -35,20 +35,22 @@ class Web {
 			Process p = Runtime.getRuntime().exec(compile);
 			r.result = "";
 			int k;
-			InputStream pis = p.getInputStream();
+			InputStream pis = p.getErrorStream();
 			do {
 				k = pis.read();
 				r.result += k >= 0 ? (char)k : "";
 			} while (k != -1);
 			
 			Process q = Runtime.getRuntime().exec(execute);
+			Killer killer = new Killer(q);
+			killer.start();
 			InputStream qis = q.getInputStream();
 			do {
 				k = qis.read();
 				r.result += k >= 0 ? (char)k : "";
 			} while (k != -1);
 		} catch (Exception e) {
-			r.result = e.toString();	
+			r.result = "Timeout";	
 		} finally {
 			File f = new File(name);
 			f.delete();
@@ -69,6 +71,8 @@ class Web {
 			writer.write(code);
 			writer.close();
 			Process p = Runtime.getRuntime().exec(command);
+			Killer killer = new Killer(p);
+			killer.start();
 			r.result = "";
 			int k;
 			InputStream error = p.getErrorStream();
@@ -83,7 +87,7 @@ class Web {
 				r.result += k >= 0 ? (char)k : "";
 			} while (k != -1);
 		} catch (Exception e) {
-			r.result = e.toString();	
+			r.result = "Timeout";	
 		} finally {
 			File f = new File(name);
 			f.delete();
@@ -95,4 +99,17 @@ class Web {
 
 class Result {
 	public String result;
+}
+
+class Killer extends Thread{
+	Killer(Process p) {
+		process = p;
+	}
+	Process process;
+	public void run() {
+		try {
+			Thread.sleep(5000);
+			process.destroy();
+		} catch (Exception e) { }
+	}
 }
