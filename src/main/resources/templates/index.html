@@ -1,0 +1,80 @@
+<#include "header.html">
+
+<div class="container">
+
+<div class="btn-group" style="margin-top:0.5rem;">
+	<button class="btn btn-primary" onclick="runC()">Run C</button>
+	<button class="btn btn-primary" onclick="runJava()">Run Java</button>
+	<button class="btn btn-primary" onclick="runJavaScript()">Run JavaScript</button>
+</div>
+<textarea class="form-control" rows="20"
+			  id="editor" spellcheck="false"
+>class Test {
+	public static void main(String[] z) {
+		System.out.println("Welcome");
+	}
+}
+</textarea>
+<pre id="result"></pre>
+</div>
+	
+<style>
+	textarea.form-control {
+		font-family: monospace;
+		font-size: 1.5rem;
+		margin: 0.5rem 0;
+		tab-size: 4;
+	}
+	#result {
+		margin-top: 1rem;
+		padding: 0.5rem;
+		background: #def;
+	}
+</style>
+	
+<script>
+	document.getElementById("editor").onkeydown = function(e) {
+		if(e.keyCode == 9 || e.which == 9) {
+			e.preventDefault()
+			var s = this.selectionStart
+			this.value = this.value.substring(0, this.selectionStart) + "\t" +
+							this.value.substring(this.selectionEnd)
+			this.selectionEnd = s + 1
+		}
+	}
+	
+	function runC() {
+		var result = document.getElementById("result")
+		result.innerText = '...'
+		var editor = document.getElementById("editor")
+		var data = new FormData()
+		data.append('code', editor.value)
+		fetch("/run-c", {method: "post", body: data})
+		.then( r => r.json() )
+		.then( d => result.innerText = d.result )
+	}
+	
+	function runJava() {
+		var result = document.getElementById("result")
+		result.innerText = '...'
+		var editor = document.getElementById("editor")
+		var data = new FormData()
+		data.append('code', editor.value)
+		fetch("/run-java", {method: "post", body: data})
+		.then( r => r.json() )
+		.then( d => result.innerText = d.result )
+	}
+	
+	function runJavaScript() {
+		var result = document.getElementById("result")
+		result.innerText = ""
+		var editor = document.getElementById("editor")
+		eval(editor.value)
+	}
+	
+	function write(o) {
+		var result = document.getElementById("result")
+		result.innerText += JSON.stringify(o) + "\n"
+	}
+</script>
+<#include "footer.html">
