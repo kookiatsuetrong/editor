@@ -50,7 +50,7 @@ class Web {
 				r.result += k >= 0 ? (char)k : "";
 			} while (k != -1);
 		} catch (Exception e) {
-			r.result = "Timeout";	
+			r.result = "Error";	
 		} finally {
 			File f = new File(name);
 			f.delete();

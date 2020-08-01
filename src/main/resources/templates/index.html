@@ -7,7 +7,13 @@
 	<button class="btn btn-primary" onclick="runJava()">Run Java</button>
 	<button class="btn btn-primary" onclick="runJavaScript()">Run JavaScript</button>
 </div>
-<textarea class="form-control" rows="8"
+
+<div class="btn-group" style="float:right; margin-top:0.5rem;">
+	<button class="btn btn-primary" onclick="switchToLight()">Light</button>
+	<button class="btn btn-primary" onclick="switchToDark()">Dark</button>
+</div>
+	
+	<textarea class="form-control" rows="8"
 			  id="editor" spellcheck="false"
 >#include <stdio.h>
 int main(void) {
@@ -26,14 +32,55 @@ int main(void) {
 		tab-size: 4;
 		height: calc(100vh - 10rem);
 	}
+	
 	#result {
 		margin-top: 1rem;
 		padding: 0.5rem;
 		background: #def;
 	}
+	
+	.btn-primary {
+		transition: opacity 0.1s linear;
+	}
+	
+	.btn-primary:hover {
+		opacity: 0.8;
+	}
 </style>
 	
 <script>
+	switchToLight()
+	
+	function switchToLight() {
+		document.querySelector('body').style.background = 'white'
+		document.querySelector('textarea').style.background = 'white'
+		document.querySelector('textarea').style.color = '#222'
+		document.querySelector('textarea').style.border = '2px solid #ccc'
+		document.querySelector('pre').style.background = '#eee'
+		document.querySelector('pre').style.color = '#222'
+		
+		var all = document.querySelectorAll('.btn-primary')
+		for (var i of all) {
+			i.style.background = '#789'
+			i.style.border = '1px solid #456'
+		}
+	}
+	
+	function switchToDark() {
+		document.querySelector('body').style.background = '#222'
+		document.querySelector('textarea').style.background = '#222'
+		document.querySelector('textarea').style.color = '#0F0'
+		document.querySelector('textarea').style.border = '2px solid #666'
+		document.querySelector('pre').style.background = '#444'
+		document.querySelector('pre').style.color = 'white'
+		
+		var all = document.querySelectorAll('.btn-primary')
+		for (var i of all) {
+			i.style.background = '#777'
+			i.style.border = '1px solid #ccc'
+		}
+	}
+	
 	document.getElementById("editor").onkeydown = function(e) {
 		if(e.keyCode == 9 || e.which == 9) {
 			e.preventDefault()
@@ -75,7 +122,13 @@ int main(void) {
 	
 	function write(o) {
 		var result = document.getElementById("result")
-		result.innerText += JSON.stringify(o) + "\n"
+		if (typeof o == 'string') {
+			result.innerText += o + "\n"
+		} else {
+			result.innerText += JSON.stringify(o) + "\n"
+		}
 	}
+	
+	
 </script>
 <#include "footer.html">
