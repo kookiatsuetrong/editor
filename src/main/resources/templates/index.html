@@ -23,14 +23,16 @@ int main(void) {
 </textarea>
 <pre id="result"></pre>
 </div>
-	
+
 <style>
 	textarea.form-control {
 		font-family: monospace;
 		font-size: 1.5rem;
 		margin: 0.5rem 0;
+		-moz-tab-size: 4;
 		tab-size: 4;
 		height: calc(100vh - 10rem);
+		line-height: 1.5rem;
 	}
 	
 	#result {
@@ -117,7 +119,15 @@ int main(void) {
 		var result = document.getElementById("result")
 		result.innerText = ""
 		var editor = document.getElementById("editor")
-		eval(editor.value)
+		try {
+			eval(editor.value)
+		} catch (error) {
+			write(error.name + ": " + error.message)
+//			write(error.lineNumber)
+//			write(error.columnNumber)
+//			write(error.fileName)
+//			write(error.stack)
+		}
 	}
 	
 	function write(o) {
